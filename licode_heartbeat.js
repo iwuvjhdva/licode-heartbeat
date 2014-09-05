@@ -1,5 +1,7 @@
 /*jshint curly:true, indent:4, strict:true*/
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 var config = require('./config');
 
 var N = require('./vendor/nuve');
