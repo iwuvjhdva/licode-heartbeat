@@ -1,0 +1,12 @@
+{
+    "name": "licode-heartbeat",
+    "description": "Licode heartbeat updater",
+    "scripts": {
+        "start": "node licode_heartbeat.js"
+    },
+    "dependencies": {
+        "extend": "*",
+        "socket.io-client": "0.9.16"
+    },
+    "version": "0.0.1"
+}

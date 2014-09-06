@@ -1,16 +1,18 @@
 /*jshint curly:true, indent:4, strict:true*/
 
+//global.__base = __dirname + '/';
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
-var config = require('./config');
 
 var N = require('./vendor/nuve');
 var Erizo = require('./vendor/erizofc');
 
+var config = require('./default_config');
+
 var roomID, erizoRoom;
 
 
-N.API.init(config.Nuve.serviceID, config.Nuve.serviceKey, config.Nuve.host);
+console.log(config);
+N.API.init(config.serviceID, config.serviceKey, config.host);
 
 var errorCallback = function (e) {
     "use strict";
@@ -38,14 +40,13 @@ var onCreateToken = function (token) {
         console.log("Data stream published.");
         setInterval(function () {
             dataStream.sendData({action: 'update-heartbeat'});
-            console.log("Heartbeat sent");
         }, 5000);
     }); 
 };
 
 var createToken = function (roomID) {
     "use strict";
-    N.API.createToken(roomID, 'server', 'server', onCreateToken, errorCallback);
+    N.API.createToken(roomID, 'heartbeat', 'heartbeat', onCreateToken, errorCallback);
 };
 
 N.API.getRooms(function (rooms) {
@@ -53,13 +54,13 @@ N.API.getRooms(function (rooms) {
     var nuveRoom;
 
     for (var index in rooms) {
-        if (rooms[index].name == config.Nuve.roomName) {
+        if (rooms[index].name == config.roomName) {
             nuveRoom = rooms[index];
         }
     }
 
     if (nuveRoom === undefined) {
-        nuveRoom = N.API.createRoom(config.Nuve.roomName, function(room) {
+        nuveRoom = N.API.createRoom(config.roomName, function(room) {
             console.log('Room created with id: ', room._id);
             createToken(room._id);
         }, errorCallback);
